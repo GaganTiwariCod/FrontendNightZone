@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en" data-screen="login">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shubhkaal — sign in</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&family=Mukta:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#241631;
+  --night-2:#2D1C3C;
+  --night-line:#4A3358;
+  --brass:#C99A3F;
+  --marigold:#E8862B;
+  --kumkum:#9E2B2B;
+  --tulsi:#4E6B4F;
+  --chandan:#F7EEDC;
+  --paper:#FFFCF5;
+  --ink:#2A2036;
+  --muted:#6E6074;
+  --line:#E3D6BF;
+  --ui:"Mukta","Segoe UI",system-ui,-apple-system,sans-serif;
+  --display:"Tiro Devanagari Hindi",Georgia,serif;
+  --r-s:10px;--r-m:14px;--r-l:22px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--night);scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--ui);color:var(--ink);background:var(--night);font-size:16px;line-height:1.55}
+button{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--marigold);outline-offset:3px;border-radius:5px}
+img,svg{max-width:100%}
+
+.screen{display:none}
+.screen.is-active{display:flex}
+
+.shell{
+  min-height:100svh;width:100%;display:flex;align-items:center;justify-content:center;
+  padding:32px 18px;position:relative;overflow:hidden;background:var(--night);
+}
+.shell::before{
+  content:"";position:absolute;left:50%;top:8%;width:640px;height:640px;transform:translateX(-50%);
+  background:radial-gradient(circle,rgba(232,134,43,.24),rgba(36,22,49,0) 68%);pointer-events:none;
+}
+/* faint diya-lattice pattern echoing the dashboard */
+.shell::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:radial-gradient(circle at 1px 1px, var(--night-line) 1px, transparent 1.6px);
+  background-size:26px 26px;
+  mask-image:linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+}
+
+.card{
+  position:relative;z-index:2;width:100%;max-width:420px;background:var(--paper);
+  border:1.5px solid var(--line);border-radius:var(--r-l);padding:30px 28px 28px;
+  box-shadow:0 24px 60px rgba(15,8,22,.35);
+}
+.brand{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:20px}
+.brand svg{width:30px;height:30px}
+.brand b{font-family:var(--display);font-size:21px;font-weight:400;color:var(--night)}
+
+.tabs{display:flex;background:#F0E5CF;border-radius:999px;padding:4px;margin-bottom:22px}
+.tabs button{
+  flex:1;border:0;background:none;border-radius:999px;padding:9px 0;font-size:14.5px;font-weight:600;color:#8A7A64;
+}
+.tabs button.on{background:var(--paper);color:var(--kumkum);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+h1{font-family:var(--display);font-weight:400;font-size:25px;margin:0 0 4px;text-align:center;color:var(--night)}
+.sub{margin:0 0 22px;text-align:center;color:var(--muted);font-size:14.5px}
+
+.google{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  background:#fff;border:1.5px solid var(--line);border-radius:var(--r-s);padding:12px 16px;
+  font-weight:600;font-size:15px;color:var(--ink);
+}
+.google:hover{background:#FBF7EE}
+.google svg{width:19px;height:19px}
+
+.divider{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px;margin:20px 0}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.method{display:flex;gap:6px;background:#F0E5CF;border-radius:999px;padding:4px;margin-bottom:18px}
+.method button{flex:1;border:0;background:none;border-radius:999px;padding:8px 0;font-size:13.5px;font-weight:600;color:#8A7A64}
+.method button.on{background:var(--paper);color:var(--night);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+.pane{display:none}
+.pane.on{display:block}
+
+.field{margin-bottom:15px}
+.field label{display:block;font-size:13.5px;font-weight:600;margin-bottom:6px;color:#4A3D52}
+.field .fwd{display:flex;justify-content:space-between;align-items:baseline}
+.field .fwd button{background:none;border:0;padding:0;color:var(--kumkum);font-size:13px;font-weight:600;cursor:pointer}
+.control{
+  width:100%;background:#fff;border:1.5px solid var(--line);border-radius:var(--r-s);
+  padding:12px 13px;font-family:var(--ui);font-size:16px;color:var(--ink);
+}
+.control::placeholder{color:#AFA2B3}
+.control:focus{border-color:var(--marigold);outline:none;box-shadow:0 0 0 3px rgba(232,134,43,.18)}
+.phone{display:flex;align-items:stretch;border:1.5px solid var(--line);border-radius:var(--r-s);background:#fff;overflow:hidden}
+.phone:focus-within{border-color:var(--marigold);box-shadow:0 0 0 3px rgba(232,134,43,.18)}
+.phone span{display:flex;align-items:center;padding:0 12px;background:#F6EFE1;border-right:1.5px solid var(--line);font-size:15px;color:#4A3D52}
+.phone input{border:0;flex:1;padding:12px 13px;font-family:var(--ui);font-size:16px;background:none;min-width:0}
+.phone input:focus{outline:none}
+.pw{position:relative}
+.pw input{padding-right:44px}
+.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;padding:8px;color:var(--muted);cursor:pointer;display:flex}
+.pw button svg{width:19px;height:19px}
+
+.otp{display:flex;gap:8px;margin-bottom:8px}
+.otp input{width:100%;height:52px;text-align:center;font-size:19px;font-family:var(--display);border:1.5px solid var(--line);border-radius:var(--r-s);background:#fff}
+.otp input:focus{border-color:var(--marigold);outline:none;box-shadow:0 0 0 3px rgba(232,134,43,.18)}
+.resend{font-size:13px;color:var(--muted);margin:0 0 20px}
+.resend b{color:var(--kumkum);font-weight:600}
+.sentto{font-size:13px;color:var(--muted);margin:0 0 16px}
+.sentto b{color:var(--ink);font-weight:600}
+
+.check{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;color:var(--muted);margin:2px 0 20px}
+.check input{margin-top:3px;accent-color:var(--marigold)}
+.check a{color:var(--kumkum);font-weight:600}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;width:100%;
+  background:var(--marigold);color:#2A1503;border:0;border-radius:var(--r-s);
+  padding:13px 18px;font-size:15.5px;font-weight:600;cursor:pointer;
+}
+.btn:hover{background:#D8791F}
+
+.foot-note{text-align:center;color:var(--muted);font-size:13.5px;margin-top:18px}
+.foot-note button{background:none;border:0;padding:0;color:var(--kumkum);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+.trust{display:flex;justify-content:center;gap:18px;margin-top:20px;color:#9C8AA0}
+.trust span{display:flex;align-items:center;gap:6px;font-size:12px;color:#B8A6B8}
+.trust svg{width:14px;height:14px}
+
+/* the switcher chip */
+.switcher{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:50;
+  display:flex;gap:4px;background:rgba(36,22,49,.94);border:1px solid var(--night-line);
+  padding:5px;border-radius:999px;
+}
+.switcher button{background:none;border:0;color:#C9B8C6;padding:7px 15px;border-radius:999px;font-size:13px;cursor:pointer}
+.switcher button.on{background:var(--marigold);color:#2A1503;font-weight:600}
+
+@media (max-width:420px){
+  .card{padding:24px 18px 22px;border-radius:18px}
+  .shell{padding:22px 14px 90px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<section class="screen is-active" id="s-login">
+  <div class="shell">
+    <div class="card">
+      <div class="brand">
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M20 5c2.6 4 4.3 6.6 4.3 9.2A4.3 4.3 0 0 1 20 18.5a4.3 4.3 0 0 1-4.3-4.3C15.7 11.6 17.4 9 20 5z" fill="#E8862B"/>
+          <path d="M6 24h28c0 5.5-6.3 9.5-14 9.5S6 29.5 6 24z" fill="none" stroke="#C99A3F" stroke-width="2.2"/>
+          <path d="M3 24h34" stroke="#C99A3F" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <b>Shubhkaal</b>
+      </div>
+
+      <div class="tabs">
+        <button type="button" class="on" onclick="show('login')">Sign in</button>
+        <button type="button" onclick="show('signup')">Create account</button>
+      </div>
+
+      <h1>Welcome back</h1>
+      <p class="sub">Sign in to book, post or pick up where you left off.</p>
+
+      <button class="google" type="button">
+        <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.2-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 16 18.9 13 24 13c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6 29.6 4 24 4c-7.5 0-14 4.2-17.7 10.7z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.4-1.9 14.2-5.1l-6.6-5.4C29.6 35.4 27 36 24 36c-5.2 0-9.6-3.3-11.2-8l-6.6 5.1C9.9 39.6 16.4 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.2-4.1 5.5l6.6 5.4C41.4 35.9 44 30.4 44 24c0-1.2-.1-2.4-.4-3.5z"/></svg>
+        Continue with Google
+      </button>
+
+      <div class="divider">or sign in with</div>
+
+      <div class="method">
+        <button type="button" class="on" onclick="setMethod(this,'li-pw')">Password</button>
+        <button type="button" onclick="setMethod(this,'li-otp')">OTP</button>
+      </div>
+
+      <div class="pane on" id="li-pw">
+        <div class="field">
+          <label for="li-phone1">Mobile number or email</label>
+          <input id="li-phone1" class="control" placeholder="98XXXXXXXX or you@email.com">
+        </div>
+        <div class="field">
+          <div class="fwd"><label for="li-pass">Password</label><button type="button">Forgot?</button></div>
+          <div class="pw">
+            <input id="li-pass" class="control" type="password" placeholder="Enter your password">
+            <button type="button" aria-label="Show password" onclick="togglePw(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <button class="btn" type="button" onclick="show('dashboard')">Sign in</button>
+      </div>
+
+      <div class="pane" id="li-otp">
+        <div class="field">
+          <label for="li-phone2">Mobile number</label>
+          <div class="phone">
+            <span>+91</span>
+            <input id="li-phone2" class="p-in" type="tel" inputmode="numeric" placeholder="98XXXXXXXX">
+          </div>
+        </div>
+        <div class="field">
+          <label>One-time password</label>
+          <div class="otp">
+            <input class="otp-in" inputmode="numeric" maxlength="1" aria-label="Digit 1">
+            <input class="otp-in" inputmode="numeric" maxlength="1" aria-label="Digit 2">
+            <input class="otp-in" inputmode="numeric" maxlength="1" aria-label="Digit 3">
+            <input class="otp-in" inputmode="numeric" maxlength="1" aria-label="Digit 4">
+          </div>
+          <p class="resend">Didn't get it? <b>Send again in 0:24</b></p>
+        </div>
+        <button class="btn" type="button" onclick="show('dashboard')">Verify &amp; sign in</button>
+      </div>
+
+      <p class="foot-note">New to Shubhkaal? <button type="button" onclick="show('signup')">Create an account</button></p>
+
+      <div class="trust">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Secure sign-in</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6L9 17l-5-5"/></svg>No spam, ever</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SIGNUP ============ -->
+<section class="screen" id="s-signup">
+  <div class="shell">
+    <div class="card">
+      <div class="brand">
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M20 5c2.6 4 4.3 6.6 4.3 9.2A4.3 4.3 0 0 1 20 18.5a4.3 4.3 0 0 1-4.3-4.3C15.7 11.6 17.4 9 20 5z" fill="#E8862B"/>
+          <path d="M6 24h28c0 5.5-6.3 9.5-14 9.5S6 29.5 6 24z" fill="none" stroke="#C99A3F" stroke-width="2.2"/>
+          <path d="M3 24h34" stroke="#C99A3F" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <b>Shubhkaal</b>
+      </div>
+
+      <div class="tabs">
+        <button type="button" onclick="show('login')">Sign in</button>
+        <button type="button" class="on" onclick="show('signup')">Create account</button>
+      </div>
+
+      <h1>Join the community</h1>
+      <p class="sub">Free to join — book, post and connect in minutes.</p>
+
+      <button class="google" type="button">
+        <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.2-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 16 18.9 13 24 13c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6 29.6 4 24 4c-7.5 0-14 4.2-17.7 10.7z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.4-1.9 14.2-5.1l-6.6-5.4C29.6 35.4 27 36 24 36c-5.2 0-9.6-3.3-11.2-8l-6.6 5.1C9.9 39.6 16.4 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.2-4.1 5.5l6.6 5.4C41.4 35.9 44 30.4 44 24c0-1.2-.1-2.4-.4-3.5z"/></svg>
+        Sign up with Google
+      </button>
+
+      <div class="divider">or create with</div>
+
+      <div class="method">
+        <button type="button" class="on" onclick="setMethod(this,'su-otp')">Mobile OTP</button>
+        <button type="button" onclick="setMethod(this,'su-pw')">Email &amp; password</button>
+      </div>
+
+      <div class="pane on" id="su-otp">
+        <div class="field">
+          <label for="su-name1">Full name</label>
+          <input id="su-name1" class="control" placeholder="Your name">
+        </div>
+        <div class="field">
+          <label for="su-phone">Mobile number</label>
+          <div class="phone">
+            <span>+91</span>
+            <input id="su-phone" class="p-in" type="tel" inputmode="numeric" placeholder="98XXXXXXXX">
+          </div>
+        </div>
+        <p class="sentto">We'll text a code to <b>verify it's really you</b>.</p>
+        <button class="btn" type="button" onclick="startSignupOtp()">Send OTP</button>
+
+        <div id="su-otp-step" style="display:none;margin-top:16px">
+          <div class="field">
+            <label>Enter the code</label>
+            <div class="otp">
+              <input class="otp-in" inputmode="numeric" maxlength="1" aria-label="Digit 1">
+              <input class="otp-in" inputmode="numeric" maxlength="1" aria-label="Digit 2">
+              <input class="otp-in" inputmode="numeric" maxlength="1" aria-label="Digit 3">
+              <input class="otp-in" inputmode="numeric" maxlength="1" aria-label="Digit 4">
+            </div>
+            <p class="resend">Didn't get it? <b>Send again in 0:24</b></p>
+          </div>
+          <label class="check"><input type="checkbox" checked> I agree to the <a href="#" onclick="return false">terms</a> and <a href="#" onclick="return false">privacy policy</a>.</label>
+          <button class="btn" type="button" onclick="show('dashboard')">Create account</button>
+        </div>
+      </div>
+
+      <div class="pane" id="su-pw">
+        <div class="field">
+          <label for="su-name2">Full name</label>
+          <input id="su-name2" class="control" placeholder="Your name">
+        </div>
+        <div class="field">
+          <label for="su-email">Email</label>
+          <input id="su-email" class="control" type="email" placeholder="you@email.com">
+        </div>
+        <div class="field">
+          <label for="su-pass">Create a password</label>
+          <div class="pw">
+            <input id="su-pass" class="control" type="password" placeholder="At least 8 characters">
+            <button type="button" aria-label="Show password" onclick="togglePw(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <label class="check"><input type="checkbox" checked> I agree to the <a href="#" onclick="return false">terms</a> and <a href="#" onclick="return false">privacy policy</a>.</label>
+        <button class="btn" type="button" onclick="show('dashboard')">Create account</button>
+      </div>
+
+      <p class="foot-note">Already have an account? <button type="button" onclick="show('login')">Sign in</button></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MINI DASHBOARD PREVIEW (destination only) ============ -->
+<section class="screen" id="s-dashboard">
+  <div class="shell" style="align-items:flex-start;padding-top:60px">
+    <div class="card" style="max-width:460px;text-align:center">
+      <div class="brand"><b style="font-size:26px">You're in 🪔</b></div>
+      <p class="sub" style="margin-bottom:6px">Signed in successfully.</p>
+      <p class="sub">This is where you'd land on the community home screen.</p>
+      <button class="btn" type="button" onclick="show('login')">Back to sign in</button>
+    </div>
+  </div>
+</section>
+
+<nav class="switcher" aria-label="Prototype screens">
+  <button type="button" data-go="login" class="on">Sign in</button>
+  <button type="button" data-go="signup">Sign up</button>
+</nav>
+
+<script>
+function show(name){
+  document.querySelectorAll('.screen').forEach(function(s){
+    s.classList.toggle('is-active', s.id === 's-' + name);
+  });
+  document.documentElement.dataset.screen = name;
+  document.querySelectorAll('.switcher button').forEach(function(b){
+    b.classList.toggle('on', b.dataset.go === name);
+  });
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('.switcher button').forEach(function(b){
+  b.addEventListener('click', function(){ show(b.dataset.go); });
+});
+
+function setMethod(btn, paneId){
+  var group = btn.parentElement;
+  group.querySelectorAll('button').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+  var card = btn.closest('.card');
+  card.querySelectorAll(':scope > .pane').forEach(function(p){ p.classList.remove('on'); });
+  document.getElementById(paneId).classList.add('on');
+}
+
+function togglePw(btn){
+  var input = btn.previousElementSibling;
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+function startSignupOtp(){
+  document.getElementById('su-otp-step').style.display = 'block';
+}
+
+document.querySelectorAll('.otp').forEach(function(group){
+  var inputs = Array.prototype.slice.call(group.querySelectorAll('.otp-in'));
+  inputs.forEach(function(i, idx){
+    i.addEventListener('input', function(){
+      i.value = i.value.replace(/\D/g,'').slice(0,1);
+      if(i.value && inputs[idx+1]) inputs[idx+1].focus();
+    });
+    i.addEventListener('keydown', function(e){
+      if(e.key === 'Backspace' && !i.value && inputs[idx-1]) inputs[idx-1].focus();
+    });
+  });
+});
+document.querySelectorAll('.p-in').forEach(function(p){
+  p.addEventListener('input', function(){ p.value = p.value.replace(/\D/g,'').slice(0,10); });
+});
+</script>
+</body>
+</html>

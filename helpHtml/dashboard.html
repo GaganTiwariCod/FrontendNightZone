@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shubhkaal — community hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&family=Mukta:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#241631;
+  --night-line:#4A3358;
+  --brass:#C99A3F;
+  --marigold:#E8862B;
+  --kumkum:#9E2B2B;
+  --tulsi:#4E6B4F;
+  --chandan:#F7EEDC;
+  --paper:#FFFCF5;
+  --ink:#2A2036;
+  --muted:#6E6074;
+  --line:#E3D6BF;
+  --ui:"Mukta","Segoe UI",system-ui,-apple-system,sans-serif;
+  --display:"Tiro Devanagari Hindi",Georgia,serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--night);scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--chandan);color:var(--ink);font-family:var(--ui);font-size:16px;line-height:1.55}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--marigold);outline-offset:3px;border-radius:5px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+
+/* ---- header ---- */
+.head{background:var(--night);color:var(--chandan);padding:14px 0}
+.head__row{display:flex;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:10px;flex:none}
+.brand svg{width:32px;height:32px}
+.brand b{font-family:var(--display);font-size:22px;font-weight:400;line-height:1}
+.brand span{display:block;font-size:11.5px;color:var(--brass);margin-top:2px}
+.search{
+  flex:1;display:flex;align-items:center;gap:9px;background:#33204F;border:1px solid var(--night-line);
+  border-radius:999px;padding:9px 16px;color:#B8A6B8;min-width:0;
+}
+.search svg{width:17px;height:17px;flex:none}
+.search input{background:none;border:0;color:var(--chandan);font:inherit;font-size:15px;flex:1;min-width:0}
+.search input::placeholder{color:#9B89A0}
+.search input:focus{outline:none}
+.city{display:flex;align-items:center;gap:6px;font-size:14.5px;color:#D6C6D4;flex:none}
+.city svg{width:15px;height:15px}
+.join{background:var(--marigold);color:#2A1503;border:0;border-radius:999px;padding:9px 18px;font-weight:600;font-size:14.5px;flex:none}
+
+/* ---- welcome + panchang ---- */
+.top{background:var(--night);color:var(--chandan);padding:8px 0 40px;position:relative;overflow:hidden}
+.top::after{
+  content:"";position:absolute;left:50%;top:-170px;width:620px;height:420px;transform:translateX(-50%);
+  background:radial-gradient(ellipse,rgba(232,134,43,.26),rgba(36,22,49,0) 70%);pointer-events:none;
+}
+.top__in{position:relative;z-index:2;text-align:center;padding-top:18px}
+.top h1{font-family:var(--display);font-weight:400;font-size:clamp(26px,4.4vw,38px);margin:0 0 8px;line-height:1.28}
+.top p{margin:0 auto;max-width:44ch;color:#D3C2CF;font-size:16px}
+.panchang{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:0;margin:26px auto 0;max-width:760px;
+  border:1px solid var(--night-line);border-radius:14px;background:#2D1C3C;overflow:hidden;
+}
+.panchang div{flex:1 1 150px;padding:12px 16px;border-right:1px solid var(--night-line);text-align:left}
+.panchang div:last-child{border-right:0}
+.panchang dt{font-size:12.5px;color:#A28FA6;margin:0}
+.panchang dd{margin:1px 0 0;font-size:15.5px}
+.panchang .hot dd{color:#F3AC7A}
+
+/* ---- the nine ---- */
+.nine{margin-top:-24px;position:relative;z-index:3}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tile{
+  background:var(--paper);border:1.5px solid var(--line);border-radius:16px;padding:18px 16px 16px;
+  display:flex;flex-direction:column;gap:10px;text-align:left;
+  box-shadow:0 2px 0 rgba(158,43,43,.05);
+}
+.tile:hover{border-color:var(--marigold);background:#FFF8EC}
+.tile__ico{
+  width:46px;height:46px;border-radius:13px;display:grid;place-items:center;flex:none;
+  background:#F5E7D0;color:var(--kumkum);
+}
+.tile__ico svg{width:24px;height:24px}
+.tile h2{font-family:var(--display);font-weight:400;font-size:20px;margin:0;line-height:1.2}
+.tile p{margin:0;font-size:14px;color:var(--muted);line-height:1.45}
+.tile .count{margin-top:auto;padding-top:9px;font-size:13px;color:var(--tulsi);font-weight:600}
+.tile .count.live{color:var(--kumkum)}
+
+/* per-tile tint */
+.t1 .tile__ico{background:#F8E3E3;color:#9E2B2B}
+.t2 .tile__ico{background:#F6E7CE;color:#8A5A12}
+.t3 .tile__ico{background:#EAE6F5;color:#4B3E7A}
+.t4 .tile__ico{background:#E7EFF6;color:#2F5A7A}
+.t5 .tile__ico{background:#EDF1E8;color:#4E6B4F}
+.t6 .tile__ico{background:#FBE8D7;color:#B4571A}
+.t7 .tile__ico{background:#F2E9F3;color:#6B3B70}
+.t8 .tile__ico{background:#F0EBE3;color:#6B5A3F}
+.t9 .tile__ico{background:#F9E2DC;color:#A33A1E}
+
+/* ---- sections ---- */
+.band{padding:44px 0 0}
+.band:last-of-type{padding-bottom:54px}
+.band__head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin-bottom:16px}
+.band__head h3{font-family:var(--display);font-weight:400;font-size:24px;margin:0}
+.band__head a{font-size:14.5px;color:var(--kumkum);font-weight:600}
+.band__head a:hover{text-decoration:underline}
+
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:16px}
+
+.news{display:flex;gap:13px;padding:13px 0;border-top:1px solid var(--line)}
+.news:first-of-type{border-top:0;padding-top:0}
+.news__when{flex:none;width:54px;font-size:12.5px;color:var(--muted);padding-top:2px}
+.news h4{margin:0 0 3px;font-size:15.5px;font-weight:600;line-height:1.35}
+.news p{margin:0;font-size:13.5px;color:var(--muted)}
+
+.event{display:flex;gap:14px;padding:13px 0;border-top:1px solid var(--line)}
+.event:first-of-type{border-top:0;padding-top:0}
+.date{
+  flex:none;width:56px;text-align:center;background:#F4E8D3;border:1px solid var(--line);
+  border-radius:9px;padding:7px 0;
+}
+.date b{display:block;font-family:var(--display);font-size:20px;line-height:1;color:var(--kumkum)}
+.date span{font-size:11.5px;color:#7A6B80}
+.event h4{margin:0 0 3px;font-size:15.5px;font-weight:600}
+.event p{margin:0;font-size:13.5px;color:var(--muted)}
+
+.help{padding:13px 0;border-top:1px solid var(--line)}
+.help:first-of-type{border-top:0;padding-top:0}
+.help h4{margin:0 0 4px;font-size:15.5px;font-weight:600}
+.help p{margin:0 0 8px;font-size:13.5px;color:var(--muted)}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tag{font-size:12.5px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:3px 10px;color:#5A4C60}
+.tag--urgent{border-color:#E7B4B4;background:#FBEBEB;color:#9E2B2B;font-weight:600}
+.tag--open{border-color:#BFD4C0;background:#EDF4ED;color:var(--tulsi)}
+.mini{background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13.5px;font-weight:600}
+.mini:hover{border-color:var(--marigold);background:#FDF6EB}
+
+/* stories strip */
+.stories{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.story{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.story__top{height:86px;display:grid;place-items:center;color:#fff}
+.story__top svg{width:34px;height:34px;opacity:.95}
+.s-a{background:#6B3B70}.s-b{background:#9E2B2B}.s-c{background:#4E6B4F}.s-d{background:#8A5A12}
+.story__b{padding:13px 14px 15px}
+.story h4{margin:0 0 4px;font-size:15.5px;font-weight:600;line-height:1.35}
+.story p{margin:0;font-size:13px;color:var(--muted)}
+.story:hover{border-color:var(--marigold)}
+
+/* profiles */
+.people{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.person{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:16px;text-align:center}
+.ava{width:54px;height:54px;border-radius:50%;margin:0 auto 10px;display:grid;place-items:center;color:#fff;font-weight:600;font-size:19px;background:var(--night)}
+.person h4{margin:0 0 2px;font-size:15.5px;font-weight:600}
+.person p{margin:0 0 11px;font-size:13px;color:var(--muted)}
+.person:hover{border-color:var(--marigold)}
+
+/* footer */
+.foot{background:var(--night);color:#B8A6B8;padding:30px 0 34px;font-size:14px}
+.foot__row{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:center}
+.foot a{color:#D6C6D4}
+.foot a:hover{color:var(--chandan)}
+.foot nav{display:flex;flex-wrap:wrap;gap:16px}
+
+/* mobile bar */
+.tabbar{display:none}
+
+@media (max-width:900px){
+  .cols{grid-template-columns:1fr}
+  .stories,.people{grid-template-columns:repeat(2,1fr)}
+  .tiles{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:720px){
+  .head__row{flex-wrap:wrap}
+  .search{order:3;flex-basis:100%}
+  .city span{display:none}
+  .top{padding-bottom:36px}
+  .panchang div{flex-basis:50%;border-bottom:1px solid var(--night-line)}
+  .tile{padding:15px 13px 14px}
+  .tile h2{font-size:18px}
+  .tile p{display:none}
+  .tabbar{
+    display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--night);
+    border-top:1px solid var(--night-line);padding:7px 4px calc(7px + env(safe-area-inset-bottom,0px));
+  }
+  .tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:#A895AC;padding:4px 0}
+  .tabbar a.on{color:var(--marigold)}
+  .tabbar svg{width:20px;height:20px}
+  body{padding-bottom:64px}
+}
+@media (max-width:420px){
+  .tiles{gap:10px}
+  .tile__ico{width:40px;height:40px;border-radius:11px}
+  .tile__ico svg{width:21px;height:21px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="head">
+  <div class="wrap head__row">
+    <a class="brand" href="#">
+      <svg viewBox="0 0 40 40" aria-hidden="true">
+        <path d="M20 5c2.6 4 4.3 6.6 4.3 9.2A4.3 4.3 0 0 1 20 18.5a4.3 4.3 0 0 1-4.3-4.3C15.7 11.6 17.4 9 20 5z" fill="#E8862B"/>
+        <path d="M6 24h28c0 5.5-6.3 9.5-14 9.5S6 29.5 6 24z" fill="none" stroke="#C99A3F" stroke-width="2.2"/>
+        <path d="M3 24h34" stroke="#C99A3F" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+      <span><b>Shubhkaal</b><span>Pooja &amp; aarti seva</span></span>
+    </a>
+
+    <label class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>
+      <input type="search" placeholder="Search pandits, events, people, services">
+    </label>
+
+    <span class="city">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+      Mumbai <span>· change</span>
+    </span>
+    <button class="join" type="button">Join free</button>
+  </div>
+</header>
+
+<section class="top">
+  <div class="wrap top__in">
+    <h1>Everything our community needs, in one place</h1>
+    <p>Find a pandit, a match, a mandal event or a helping hand — no account needed to look around.</p>
+
+    <dl class="panchang">
+      <div><dt>Today</dt><dd>Sat, 19 September</dd></div>
+      <div><dt>Tithi</dt><dd>Shukla Ashtami</dd></div>
+      <div class="hot"><dt>Rahu kaal</dt><dd>9:10 – 10:40 am</dd></div>
+      <div><dt>Sandhya aarti</dt><dd>7:00 pm</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="wrap nine" aria-label="Services">
+  <div class="tiles">
+
+    <a class="tile t1" href="#">
+      <span class="tile__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="15" r="5"/><circle cx="16" cy="15" r="5"/><path d="M12 4l2 3h-4z" fill="currentColor" stroke="none"/></svg></span>
+      <h2>Marriage</h2>
+      <p>Matrimony profiles from within the community, with family details and kundli matching.</p>
+      <span class="count">1,240 profiles</span>
+    </a>
+
+    <a class="tile t2" href="#">
+      <span class="tile__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l7 5v2H5V8z"/><path d="M7 10v8M12 10v8M17 10v8M4 21h16"/></svg></span>
+      <h2>Find Pandit</h2>
+      <p>Book a verified pandit for any ceremony, in your language and your tradition.</p>
+      <span class="count">420 pandits nearby</span>
+    </a>
+
+    <a class="tile t3" href="#">
+      <span class="tile__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22z"/><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5a2.5 2.5 0 0 1 2.5 2z"/></svg></span>
+      <h2>Stories</h2>
+      <p>Katha, vrat vidhi and festival stories to read aloud at home.</p>
+      <span class="count">6 new this week</span>
+    </a>
+
+    <a class="tile t4" href="#">
+      <span class="tile__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h16M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></span>
+      <h2>Astrology</h2>
+      <p>Free kundli, guna matching and your daily rashi from real jyotishis.</p>
+      <span class="count">Daily rashi ready</span>
+    </a>
+
+    <a class="tile t5" href="#">
+      <span class="tile__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h7M7 12.5h7M7 16h4M17 9v7"/></svg></span>
+      <h2>Local Updates</h2>
+      <p>Notices, temple news and what's happening in your area today.</p>
+      <span class="count live">9 posted today</span>
+    </a>
+
+    <a class="tile t6" href="#">
+      <span class="tile__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/><circle cx="12" cy="15" r="1.6" fill="currentColor" stroke="none"/></svg></span>
+      <h2>Events</h2>
+      <p>Satsang, bhandara, garba and mandal programmes near you.</p>
+      <span class="count">14 coming up</span>
+    </a>
+
+    <a class="tile t7" href="#">
+      <span class="tile__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="9" r="3.4"/><path d="M2.5 19c0-3.2 2.9-5.4 6.5-5.4s6.5 2.2 6.5 5.4"/><path d="M16 6.2a3.4 3.4 0 0 1 0 6.6M18 19c0-2.4-1-4.2-2.6-5.3"/></svg></span>
+      <h2>Find People</h2>
+      <p>Search the directory by surname, gotra, native place or city.</p>
+      <span class="count">8,600 members</span>
+    </a>
+
+    <a class="tile t8" href="#">
+      <span class="tile__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 9l1.4-4h13.2L20 9z"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M9.5 20v-6h5v6"/></svg></span>
+      <h2>Services</h2>
+      <p>Caterers, halls, decorators, band, photographers — rated by members.</p>
+      <span class="count">310 listings</span>
+    </a>
+
+    <a class="tile t9" href="#">
+      <span class="tile__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20.5s-7.5-4.6-7.5-9.7A4.3 4.3 0 0 1 12 7.8a4.3 4.3 0 0 1 7.5 3c0 5.1-7.5 9.7-7.5 9.7z"/></svg></span>
+      <h2>Community Help</h2>
+      <p>Ask for help or offer it — medical, education, jobs, emergencies.</p>
+      <span class="count live">3 urgent requests</span>
+    </a>
+
+  </div>
+</section>
+
+<section class="wrap band">
+  <div class="cols">
+
+    <div class="card">
+      <div class="band__head" style="margin-bottom:12px">
+        <h3 style="font-size:20px">Local updates</h3>
+        <a href="#">See all</a>
+      </div>
+      <div class="news"><span class="news__when">2h ago</span><div><h4>Ganesh visarjan route changed at Chowpatty</h4><p>Traffic police notice · Mumbai</p></div></div>
+      <div class="news"><span class="news__when">5h ago</span><div><h4>Free health camp at Samaj Bhavan on Sunday</h4><p>Posted by Dadar Mandal</p></div></div>
+      <div class="news"><span class="news__when">Yest.</span><div><h4>New annadan kitchen opens in Thane</h4><p>Volunteers needed on weekends</p></div></div>
+    </div>
+
+    <div class="card">
+      <div class="band__head" style="margin-bottom:12px">
+        <h3 style="font-size:20px">Upcoming events</h3>
+        <a href="#">See all</a>
+      </div>
+      <div class="event"><div class="date"><b>22</b><span>SEP</span></div><div><h4>Sundarkand paath</h4><p>6:30 pm · Ram Mandir, Matunga</p></div></div>
+      <div class="event"><div class="date"><b>27</b><span>SEP</span></div><div><h4>Community bhandara</h4><p>12:00 pm · Samaj Bhavan, Dadar</p></div></div>
+      <div class="event"><div class="date"><b>05</b><span>OCT</span></div><div><h4>Youth meet &amp; job mela</h4><p>10:00 am · Thane West</p></div></div>
+    </div>
+
+    <div class="card">
+      <div class="band__head" style="margin-bottom:12px">
+        <h3 style="font-size:20px">Community help</h3>
+        <a href="#">Post a request</a>
+      </div>
+      <div class="help">
+        <h4>Blood donors needed — B negative</h4>
+        <p>Hinduja Hospital, Mahim · needed by tomorrow</p>
+        <div class="row"><span class="tag tag--urgent">Urgent</span><span class="tag">Medical</span><button class="mini" type="button">I can help</button></div>
+      </div>
+      <div class="help">
+        <h4>Fees support for two students</h4>
+        <p>Class 11 &amp; 12 · ₹38,000 raised of ₹60,000</p>
+        <div class="row"><span class="tag tag--open">Open</span><span class="tag">Education</span><button class="mini" type="button">Contribute</button></div>
+      </div>
+      <div class="help">
+        <h4>Looking for a part-time accounts job</h4>
+        <p>Member from Nashik, 4 years experience</p>
+        <div class="row"><span class="tag tag--open">Open</span><span class="tag">Jobs</span><button class="mini" type="button">Refer someone</button></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="wrap band">
+  <div class="band__head">
+    <h3>Stories to read this week</h3>
+    <a href="#">All stories</a>
+  </div>
+  <div class="stories">
+    <a class="story" href="#">
+      <span class="story__top s-a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22z"/><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5a2.5 2.5 0 0 1 2.5 2z"/></svg></span>
+      <span class="story__b"><h4>Satyanarayan katha, all five adhyay</h4><p>Read in Marathi or Hindi · 18 min</p></span>
+    </a>
+    <a class="story" href="#">
+      <span class="story__top s-b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3c2 3.2 3.2 5 3.2 6.8A3.2 3.2 0 0 1 12 13a3.2 3.2 0 0 1-3.2-3.2C8.8 8 10 6.2 12 3z"/><path d="M4 18h16M6 18c0-3 2.7-5 6-5s6 2 6 5"/></svg></span>
+      <span class="story__b"><h4>How to do aarti at home, step by step</h4><p>For beginners · 6 min</p></span>
+    </a>
+    <a class="story" href="#">
+      <span class="story__top s-c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></span>
+      <span class="story__b"><h4>Why we keep the Ekadashi vrat</h4><p>Vrat vidhi and timings · 9 min</p></span>
+    </a>
+    <a class="story" href="#">
+      <span class="story__top s-d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l2.6 5.6 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.4l6-.8z"/></svg></span>
+      <span class="story__b"><h4>Navratri: nine nights, nine forms</h4><p>Festival guide · 12 min</p></span>
+    </a>
+  </div>
+</section>
+
+<section class="wrap band">
+  <div class="band__head">
+    <h3>New members this week</h3>
+    <a href="#">Browse directory</a>
+  </div>
+  <div class="people">
+    <div class="person">
+      <span class="ava" style="background:#9E2B2B">AK</span>
+      <h4>Anjali Kulkarni</h4><p>Pune · Teacher</p>
+      <button class="mini" type="button">View profile</button>
+    </div>
+    <div class="person">
+      <span class="ava" style="background:#4B3E7A">RS</span>
+      <h4>Rohit Shastri</h4><p>Mumbai · Pandit, 12 yrs</p>
+      <button class="mini" type="button">View profile</button>
+    </div>
+    <div class="person">
+      <span class="ava" style="background:#4E6B4F">MP</span>
+      <h4>Meera Patil</h4><p>Nashik · CA</p>
+      <button class="mini" type="button">View profile</button>
+    </div>
+    <div class="person">
+      <span class="ava" style="background:#8A5A12">SD</span>
+      <h4>Sameer Deshpande</h4><p>Thane · Caterer</p>
+      <button class="mini" type="button">View profile</button>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap foot__row">
+    <span>Shubhkaal · a community platform for Maharashtra</span>
+    <nav>
+      <a href="#">About</a><a href="#">List your service</a><a href="#">Register as pandit</a><a href="#">Contact</a>
+    </nav>
+  </div>
+</footer>
+
+<nav class="tabbar" aria-label="Quick links">
+  <a href="#" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+  <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 5v2H5V8z"/><path d="M7 10v8M12 10v8M17 10v8M4 21h16"/></svg>Pandit</a>
+  <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>Events</a>
+  <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="9" r="3.4"/><path d="M2.5 19c0-3.2 2.9-5.4 6.5-5.4s6.5 2.2 6.5 5.4"/></svg>People</a>
+  <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20.5s-7.5-4.6-7.5-9.7A4.3 4.3 0 0 1 12 7.8a4.3 4.3 0 0 1 7.5 3c0 5.1-7.5 9.7-7.5 9.7z"/></svg>Help</a>
+</nav>
+
+</body>
+</html>
