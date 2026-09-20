@@ -193,8 +193,128 @@ export default function Header() {
                       <span>🕉️</span>
                       <span>Dharmik &amp; Spiritual Wisdom</span>
                     </button>
+                    <button
+                      onClick={() => {
+                        setShowUserMenu(false);
+                        setCurrentScreen('astrology');
+                      }}
+                      className="w-full text-left px-4 py-2 text-[#E8862B] hover:bg-[#3D2650] flex items-center gap-2 font-medium"
+                    >
+                      <span>🔮</span>
+                      <span>Astrology &amp; Kundli Hub</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowUserMenu(false);
+                        setCurrentScreen('astrology-kundli');
+                      }}
+                      className="w-full text-left px-4 py-2 text-[#D6C6D4] hover:bg-[#3D2650] hover:text-white flex items-center gap-2"
+                    >
+                      <span>✨</span>
+                      <span>My Janam Kundli</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowUserMenu(false);
+                        setCurrentScreen('astrology-matching');
+                      }}
+                      className="w-full text-left px-4 py-2 text-[#D6C6D4] hover:bg-[#3D2650] hover:text-white flex items-center gap-2"
+                    >
+                      <span>💖</span>
+                      <span>Kundli Matching (36 Gunas)</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowUserMenu(false);
+                        setCurrentScreen('astrologer-directory');
+                      }}
+                      className="w-full text-left px-4 py-2 text-[#D6C6D4] hover:bg-[#3D2650] hover:text-white flex items-center gap-2"
+                    >
+                      <span>🧑‍🏫</span>
+                      <span>Find Astrologers</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowUserMenu(false);
+                        setCurrentScreen('astrologer-wizard');
+                      }}
+                      className="w-full text-left px-4 py-2 text-[#D6C6D4] hover:bg-[#3D2650] hover:text-white flex items-center gap-2"
+                    >
+                      <span>✦</span>
+                      <span>Register as Astrologer</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowUserMenu(false);
+                        setCurrentScreen('local-updates');
+                      }}
+                      className="w-full text-left px-4 py-2 text-[#E8862B] hover:bg-[#3D2650] flex items-center gap-2 font-medium"
+                    >
+                      <span>📰</span>
+                      <span>Local Updates &amp; News</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowUserMenu(false);
+                        setCurrentScreen('events');
+                      }}
+                      className="w-full text-left px-4 py-2 text-[#E8862B] hover:bg-[#3D2650] flex items-center gap-2 font-medium"
+                    >
+                      <span>🪔</span>
+                      <span>Events &amp; Meetups</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowUserMenu(false);
+                        setCurrentScreen('event-create');
+                      }}
+                      className="w-full text-left px-4 py-2 text-[#D6C6D4] hover:bg-[#3D2650] hover:text-white flex items-center gap-2"
+                    >
+                      <span>➕</span>
+                      <span>Host an Event / Yatra</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowUserMenu(false);
+                        setCurrentScreen('organizer-events');
+                      }}
+                      className="w-full text-left px-4 py-2 text-[#D6C6D4] hover:bg-[#3D2650] hover:text-white flex items-center gap-2"
+                    >
+                      <span>👥</span>
+                      <span>Organizer Portal</span>
+                    </button>
                     {user?.role?.toUpperCase() === 'ADMIN' && (
                       <>
+                        <button
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            setCurrentScreen('admin-events');
+                          }}
+                          className="w-full text-left px-4 py-2 text-[#F3AC7A] hover:bg-[#3D2650] flex items-center gap-2 font-medium"
+                        >
+                          <span>🛡️</span>
+                          <span>Events Moderation Admin</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            setCurrentScreen('admin-news');
+                          }}
+                          className="w-full text-left px-4 py-2 text-[#F3AC7A] hover:bg-[#3D2650] flex items-center gap-2 font-medium"
+                        >
+                          <span>📰</span>
+                          <span>News Moderation &amp; Sources</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            setCurrentScreen('astrology-admin');
+                          }}
+                          className="w-full text-left px-4 py-2 text-[#F3AC7A] hover:bg-[#3D2650] flex items-center gap-2 font-medium"
+                        >
+                          <span>🔮</span>
+                          <span>Astrology Admin Moderation</span>
+                        </button>
                         <button
                           onClick={() => {
                             setShowUserMenu(false);

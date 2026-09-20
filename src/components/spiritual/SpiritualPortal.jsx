@@ -5,7 +5,7 @@ import { getTranslation } from '../../utils/i18n';
 import SpiritualContentCard from './SpiritualContentCard';
 import SpiritualRequestModal from './SpiritualRequestModal';
 
-export default function SpiritualPortal({ onSelectContent, onOpenAdmin }) {
+export default function SpiritualPortal({ onSelectContent, onOpenAdmin, onBack }) {
   const { user, showToast } = useAuth();
   const [contents, setContents] = useState([]);
   const [pagination, setPagination] = useState({ total: 0, page: 1, limit: 12, totalPages: 1 });
@@ -92,6 +92,19 @@ export default function SpiritualPortal({ onSelectContent, onOpenAdmin }) {
 
   return (
     <div className="max-w-[1080px] mx-auto px-4 sm:px-6 py-6 space-y-6 text-[#2A2036]">
+      {/* Navigation Top Bar */}
+      {onBack && (
+        <div className="flex items-center justify-between">
+          <button
+            type="button"
+            onClick={onBack}
+            className="inline-flex items-center gap-2 text-xs font-bold text-[#6E6074] hover:text-[#241631] bg-white border border-[#E3D6BF] px-3.5 py-1.5 rounded-full shadow-2xs hover:shadow-xs transition-all cursor-pointer"
+          >
+            <span>←</span>
+            <span>Back to Home</span>
+          </button>
+        </div>
+      )}
       
       {/* Top Hero Banner */}
       <div className="bg-gradient-to-r from-[#241631] to-[#3B1F4F] text-[#F7EEDC] rounded-[24px] p-6 sm:p-8 shadow-xl relative overflow-hidden">
