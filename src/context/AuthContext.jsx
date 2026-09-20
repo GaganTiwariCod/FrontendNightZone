@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { authApi } from '../api/authApi';
+import { astrologyApi } from '../api/astrologyApi';
 
 const AuthContext = createContext();
 
@@ -18,7 +19,8 @@ export const AuthProvider = ({ children }) => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState('dashboard'); // 'dashboard' | 'auth' | 'matrimony' | 'matrimony-wizard' | 'matrimony-preview' | 'matrimony-browse' | 'matrimony-admin' | 'pandit-directory' | 'pandit-profile' | 'pandit-wizard' | 'pandit-admin' | 'spiritual' | 'spiritual-detail' | 'spiritual-admin'
+  const [currentScreen, setCurrentScreen] = useState('dashboard'); 
+  // 'dashboard' | 'auth' | 'matrimony' | 'matrimony-wizard' | 'matrimony-preview' | 'matrimony-browse' | 'matrimony-admin' | 'pandit-directory' | 'pandit-profile' | 'pandit-wizard' | 'pandit-admin' | 'spiritual' | 'spiritual-detail' | 'spiritual-admin' | 'astrology' | 'astrology-dashboard' | 'astrology-kundli' | 'astrology-matching' | 'astrologer-directory' | 'astrologer-profile' | 'astrologer-wizard' | 'consultation-room' | 'astrology-admin'
   const [matrimonyWizardStep, setMatrimonyWizardStep] = useState(2);
   const [previewProfileId, setPreviewProfileId] = useState(null);
   const [selectedPanditSlug, setSelectedPanditSlug] = useState(null);
@@ -31,6 +33,21 @@ export const AuthProvider = ({ children }) => {
   const [selectedCity, setSelectedCity] = useState('Mumbai');
   const [searchQuery, setSearchQuery] = useState('');
   const [toastMessage, setToastMessage] = useState(null);
+
+  // --- News / Local Updates State ---
+  const [selectedNewsSlug, setSelectedNewsSlug] = useState(null);
+
+  // --- Events & Meetup State ---
+  const [selectedEventSlug, setSelectedEventSlug] = useState(null);
+  const [selectedEventId, setSelectedEventId] = useState(null);
+
+  // --- Astrology State ---
+  const [astrologyProfiles, setAstrologyProfiles] = useState([]);
+  const [selectedAstrologyProfile, setSelectedAstrologyProfile] = useState(null);
+  const [selectedAstrologerSlug, setSelectedAstrologerSlug] = useState(null);
+  const [selectedConsultationId, setSelectedConsultationId] = useState(null);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [astrologyTargetService, setAstrologyTargetService] = useState(null);
 
   const showToast = (msg, type = 'success') => {
     setToastMessage({ msg, type });
@@ -257,6 +274,63 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
+    if (serviceName === 'Local Updates' || serviceName === 'News' || serviceName === 'Dharmik News' || serviceName === 'Updates') {
+      setCurrentScreen('local-updates');
+      return;
+    }
+
+    if (serviceName === 'Events' || serviceName === 'Spiritual Events' || serviceName === 'Yatra' || serviceName === 'Meetup') {
+      setCurrentScreen('events');
+      return;
+    }
+
+    if (serviceName === 'Host Event' || serviceName === 'Create Event') {
+      if (!user) {
+        setAuthTargetService('Host Event');
+        setAuthDefaultTab('login');
+        setCurrentScreen('auth');
+        showToast('Please sign in to host and publish a spiritual event.', 'info');
+      } else {
+        setCurrentScreen('event-create');
+      }
+      return;
+    }
+
+    if (serviceName === 'Astrology' || serviceName === 'Jyotish' || serviceName === 'Kundli' || serviceName === 'Kundli Matching') {
+      if (serviceName === 'Kundli') {
+        setCurrentScreen('astrology-kundli');
+      } else if (serviceName === 'Kundli Matching') {
+        setCurrentScreen('astrology-matching');
+      } else {
+        setCurrentScreen('astrology');
+      }
+      return;
+    }
+
+    if (serviceName === 'Register as Astrologer' || serviceName === 'Astrologer Registration') {
+      if (!user) {
+        setAuthTargetService('Register as Astrologer');
+        setAuthDefaultTab('login');
+        setCurrentScreen('auth');
+        showToast('Please sign in to register as an authenticated Astrologer.', 'info');
+      } else {
+        setCurrentScreen('astrologer-wizard');
+      }
+      return;
+    }
+
+    if (
+      serviceName === 'Find People' ||
+      serviceName === 'Services' ||
+      serviceName === 'Community Help' ||
+      serviceName === 'List your service' ||
+      serviceName === 'About Shubhkaal' ||
+      serviceName === 'Contact Us'
+    ) {
+      showToast(`🚀 Coming Soon: "${serviceName}" is under active development and will be available in a future update!`, 'info');
+      return;
+    }
+
     if (!user) {
       setAuthTargetService(serviceName);
       setAuthDefaultTab('login');
@@ -265,6 +339,26 @@ export const AuthProvider = ({ children }) => {
     } else {
       setActiveServiceModal({ name: serviceName, data: serviceData });
     }
+  };
+
+  const loadAstrologyProfiles = async () => {
+    if (!user) return;
+    try {
+      const data = await astrologyApi.getMyProfiles();
+      if (data && data.success && data.profiles) {
+        setAstrologyProfiles(data.profiles);
+        if (!selectedAstrologyProfile || !data.profiles.some(p => p.id === selectedAstrologyProfile.id)) {
+          setSelectedAstrologyProfile(data.activeProfile || data.profiles[0]);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to load astrology profiles:', err);
+    }
+  };
+
+  const switchAstrologyProfile = (profile) => {
+    setSelectedAstrologyProfile(profile);
+    showToast(`Using Astrology Profile: ${profile.name} (${profile.relationship || profile.profile_type})`, 'info');
   };
 
   const openAuth = (serviceName = null, defaultTab = 'login') => {
@@ -314,6 +408,27 @@ export const AuthProvider = ({ children }) => {
         openAuth,
         toastMessage,
         showToast,
+        // Astrology exports
+        astrologyProfiles,
+        setAstrologyProfiles,
+        selectedAstrologyProfile,
+        setSelectedAstrologyProfile,
+        switchAstrologyProfile,
+        loadAstrologyProfiles,
+        selectedAstrologerSlug,
+        setSelectedAstrologerSlug,
+        selectedConsultationId,
+        setSelectedConsultationId,
+        isProfileModalOpen,
+        setIsProfileModalOpen,
+        // News / Local Updates exports
+        selectedNewsSlug,
+        setSelectedNewsSlug,
+        // Events & Meetup exports
+        selectedEventSlug,
+        setSelectedEventSlug,
+        selectedEventId,
+        setSelectedEventId
       }}
     >
       {children}

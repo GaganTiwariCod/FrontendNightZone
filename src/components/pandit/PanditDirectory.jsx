@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { panditApi } from '../../api/panditApi';
 
-export default function PanditDirectory({ onSelectPandit, onRegisterClick, onOpenAdmin }) {
+export default function PanditDirectory({ onSelectPandit, onRegisterClick, onOpenAdmin, onBack }) {
   const { user, selectedCity, showToast } = useAuth();
 
   const [pandits, setPandits] = useState([]);
@@ -90,7 +90,21 @@ export default function PanditDirectory({ onSelectPandit, onRegisterClick, onOpe
   };
 
   return (
-    <div className="max-w-[1100px] mx-auto px-4 py-8">
+    <div className="max-w-[1100px] mx-auto px-4 py-6">
+      {/* Navigation Top Bar */}
+      {onBack && (
+        <div className="flex items-center justify-between mb-4">
+          <button
+            type="button"
+            onClick={onBack}
+            className="inline-flex items-center gap-2 text-xs font-bold text-[#6E6074] hover:text-[#241631] bg-white border border-[#E3D6BF] px-3.5 py-1.5 rounded-full shadow-2xs hover:shadow-xs transition-all cursor-pointer"
+          >
+            <span>←</span>
+            <span>Back to Home</span>
+          </button>
+        </div>
+      )}
+
       {/* Hero Header */}
       <div className="bg-gradient-to-r from-[#2B1736] via-[#3B1F4B] to-[#2B1736] text-white rounded-3xl p-6 md:p-10 mb-8 border border-[#4A3358] shadow-xl relative overflow-hidden">
         <div className="absolute right-0 top-0 opacity-10 pointer-events-none transform translate-x-8 -translate-y-8">

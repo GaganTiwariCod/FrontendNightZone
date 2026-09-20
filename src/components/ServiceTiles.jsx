@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { statsApi } from '../api/statsApi';
 
 export default function ServiceTiles() {
   const { handleServiceClick } = useAuth();
+  const [liveStats, setLiveStats] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadStats = async () => {
+      try {
+        const res = await statsApi.getHomepageStats();
+        if (isMounted && res && res.success && res.data) {
+          setLiveStats(res.data);
+        }
+      } catch (err) {
+        console.warn('Could not load live service tile stats:', err);
+      }
+    };
+    loadStats();
+    return () => { isMounted = false; };
+  }, []);
 
   const services = [
     {
       id: 't1',
       name: 'Marriage',
       tagline: 'Matrimony profiles from within the community, with family details and kundli matching.',
-      count: '1,240 profiles',
+      count: liveStats?.matrimony?.label || '1,240 profiles',
       live: false,
       bgColor: 'bg-[#F8E3E3]',
       iconColor: 'text-[#9E2B2B]',
@@ -25,7 +43,7 @@ export default function ServiceTiles() {
       id: 't2',
       name: 'Find Pandit',
       tagline: 'Book a verified pandit for any ceremony, in your language and your tradition.',
-      count: '420 pandits nearby',
+      count: liveStats?.pandits?.label || '420 pandits nearby',
       live: false,
       bgColor: 'bg-[#F6E7CE]',
       iconColor: 'text-[#8A5A12]',
@@ -40,7 +58,7 @@ export default function ServiceTiles() {
       id: 't3',
       name: 'Stories',
       tagline: 'Katha, vrat vidhi and festival stories to read aloud at home.',
-      count: '6 new this week',
+      count: liveStats?.stories?.label || '6 new this week',
       live: false,
       bgColor: 'bg-[#EAE6F5]',
       iconColor: 'text-[#4B3E7A]',
@@ -55,7 +73,7 @@ export default function ServiceTiles() {
       id: 't4',
       name: 'Astrology',
       tagline: 'Free kundli, guna matching and your daily rashi from real jyotishis.',
-      count: 'Daily rashi ready',
+      count: liveStats?.astrology?.label || 'Daily rashi ready',
       live: false,
       bgColor: 'bg-[#E7EFF6]',
       iconColor: 'text-[#2F5A7A]',
@@ -70,7 +88,7 @@ export default function ServiceTiles() {
       id: 't5',
       name: 'Local Updates',
       tagline: "Notices, temple news and what's happening in your area today.",
-      count: '9 posted today',
+      count: liveStats?.news?.label || '9 posted today',
       live: true,
       bgColor: 'bg-[#EDF1E8]',
       iconColor: 'text-[#4E6B4F]',
@@ -85,7 +103,7 @@ export default function ServiceTiles() {
       id: 't6',
       name: 'Events',
       tagline: 'Satsang, bhandara, garba and mandal programmes near you.',
-      count: '14 coming up',
+      count: liveStats?.events?.label || '14 coming up',
       live: false,
       bgColor: 'bg-[#FBE8D7]',
       iconColor: 'text-[#B4571A]',
@@ -101,7 +119,8 @@ export default function ServiceTiles() {
       id: 't7',
       name: 'Find People',
       tagline: 'Search the directory by surname, gotra, native place or city.',
-      count: '8,600 members',
+      count: '🚀 Coming Soon',
+      isComingSoon: true,
       live: false,
       bgColor: 'bg-[#F2E9F3]',
       iconColor: 'text-[#6B3B70]',
@@ -117,7 +136,8 @@ export default function ServiceTiles() {
       id: 't8',
       name: 'Services',
       tagline: 'Caterers, halls, decorators, band, photographers — rated by members.',
-      count: '310 listings',
+      count: '🚀 Coming Soon',
+      isComingSoon: true,
       live: false,
       bgColor: 'bg-[#F0EBE3]',
       iconColor: 'text-[#6B5A3F]',
@@ -133,8 +153,9 @@ export default function ServiceTiles() {
       id: 't9',
       name: 'Community Help',
       tagline: 'Ask for help or offer it — medical, education, jobs, emergencies.',
-      count: '3 urgent requests',
-      live: true,
+      count: '🚀 Coming Soon',
+      isComingSoon: true,
+      live: false,
       bgColor: 'bg-[#F9E2DC]',
       iconColor: 'text-[#A33A1E]',
       icon: (

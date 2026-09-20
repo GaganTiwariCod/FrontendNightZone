@@ -24,6 +24,28 @@ import PanditAdminModeration from './components/pandit/PanditAdminModeration';
 import SpiritualPortal from './components/spiritual/SpiritualPortal';
 import SpiritualContentDetail from './components/spiritual/SpiritualContentDetail';
 import SpiritualAdminDashboard from './components/spiritual/SpiritualAdminDashboard';
+// Astrology Components
+import AstrologyLanding from './components/astrology/AstrologyLanding';
+import AstrologyDashboard from './components/astrology/AstrologyDashboard';
+import KundliViewer from './components/astrology/KundliViewer';
+import KundliMatching from './components/astrology/KundliMatching';
+import AstrologerDirectory from './components/astrology/AstrologerDirectory';
+import AstrologerProfileDetail from './components/astrology/AstrologerProfileDetail';
+import AstrologerRegistrationWizard from './components/astrology/AstrologerRegistrationWizard';
+import ConsultationRoom from './components/astrology/ConsultationRoom';
+import AstrologyAdminDashboard from './components/astrology/AstrologyAdminDashboard';
+// News & Local Updates Components
+import LocalUpdatesPage from './components/news/LocalUpdatesPage';
+import NewsDetailsPage from './components/news/NewsDetailsPage';
+import AdminNewsDashboard from './components/news/AdminNewsDashboard';
+// Spiritual Events & Meetup Components
+import EventsDiscoveryPage from './components/events/EventsDiscoveryPage';
+import EventDetailsPage from './components/events/EventDetailsPage';
+import EventCreationWizard from './components/events/EventCreationWizard';
+import OrganizerDashboard from './components/events/OrganizerDashboard';
+import AdminEventDashboard from './components/events/AdminEventDashboard';
+import SplashScreen from './components/SplashScreen';
+import SEOHead from './components/SEOHead';
 
 function MainLayout() {
   const { 
@@ -40,6 +62,17 @@ function MainLayout() {
     setSelectedSpiritualSlug,
     spiritualLang,
     setSpiritualLang,
+    selectedAstrologerSlug,
+    setSelectedAstrologerSlug,
+    selectedConsultationId,
+    setSelectedConsultationId,
+    selectedNewsSlug,
+    setSelectedNewsSlug,
+    selectedEventSlug,
+    setSelectedEventSlug,
+    selectedEventId,
+    setSelectedEventId,
+    showToast,
     openAuth
   } = useAuth();
 
@@ -54,6 +87,7 @@ function MainLayout() {
             <Header />
             <main className="flex-1">
               <MatrimonyDashboard
+                onBack={() => setCurrentScreen('dashboard')}
                 onStartWizard={(step = 2) => {
                   setMatrimonyWizardStep(step);
                   setCurrentScreen('matrimony-wizard');
@@ -143,6 +177,7 @@ function MainLayout() {
             <Header />
             <main className="flex-1">
               <PanditDirectory
+                onBack={() => setCurrentScreen('dashboard')}
                 onSelectPandit={(slug) => {
                   setSelectedPanditSlug(slug);
                   setCurrentScreen('pandit-profile');
@@ -213,6 +248,7 @@ function MainLayout() {
             <Header />
             <main className="flex-1">
               <SpiritualPortal
+                onBack={() => setCurrentScreen('dashboard')}
                 onSelectContent={(slug) => {
                   setSelectedSpiritualSlug(slug);
                   setCurrentScreen('spiritual-detail');
@@ -254,6 +290,305 @@ function MainLayout() {
           </>
         );
 
+      // --- Astrology Routes ---
+      case 'astrology':
+        return (
+          <>
+            <Header />
+            <main className="flex-1">
+              <AstrologyLanding
+                onBack={() => setCurrentScreen('dashboard')}
+                onOpenKundli={() => setCurrentScreen('astrology-kundli')}
+                onOpenMatching={() => setCurrentScreen('astrology-matching')}
+                onOpenDirectory={() => setCurrentScreen('astrologer-directory')}
+                onSelectAstrologer={(slug) => {
+                  setSelectedAstrologerSlug(slug);
+                  setCurrentScreen('astrologer-profile');
+                }}
+                onOpenDashboard={() => setCurrentScreen('astrology-dashboard')}
+                onOpenAdmin={() => setCurrentScreen('astrology-admin')}
+                onOpenPanditRemedy={() => setCurrentScreen('pandit-directory')}
+              />
+            </main>
+            <Footer />
+          </>
+        );
+
+      case 'astrology-dashboard':
+        return (
+          <>
+            <Header />
+            <main className="flex-1">
+              <AstrologyDashboard
+                onBack={() => setCurrentScreen('astrology')}
+                onOpenKundli={() => setCurrentScreen('astrology-kundli')}
+                onOpenMatching={() => setCurrentScreen('astrology-matching')}
+                onOpenDirectory={() => setCurrentScreen('astrologer-directory')}
+                onJoinConsultation={(cid) => {
+                  setSelectedConsultationId(cid);
+                  setCurrentScreen('consultation-room');
+                }}
+                onOpenPanditRemedy={() => setCurrentScreen('pandit-directory')}
+              />
+            </main>
+            <Footer />
+          </>
+        );
+
+      case 'astrology-kundli':
+        return (
+          <>
+            <Header />
+            <main className="flex-1">
+              <KundliViewer
+                onBack={() => setCurrentScreen('astrology')}
+                onConsultAstrologer={() => setCurrentScreen('astrologer-directory')}
+                onBookRemedy={() => setCurrentScreen('pandit-directory')}
+              />
+            </main>
+            <Footer />
+          </>
+        );
+
+      case 'astrology-matching':
+        return (
+          <>
+            <Header />
+            <main className="flex-1">
+              <KundliMatching
+                onBack={() => setCurrentScreen('astrology')}
+                onConsultAstrologer={() => setCurrentScreen('astrologer-directory')}
+                onBookRemedy={() => setCurrentScreen('pandit-directory')}
+              />
+            </main>
+            <Footer />
+          </>
+        );
+
+      case 'astrologer-directory':
+        return (
+          <>
+            <Header />
+            <main className="flex-1">
+              <AstrologerDirectory
+                onBack={() => setCurrentScreen('astrology')}
+                onSelectAstrologer={(slug) => {
+                  setSelectedAstrologerSlug(slug);
+                  setCurrentScreen('astrologer-profile');
+                }}
+                onRegisterClick={() => {
+                  if (!user) {
+                    openAuth('Register as Astrologer', 'login');
+                  } else {
+                    setCurrentScreen('astrologer-wizard');
+                  }
+                }}
+              />
+            </main>
+            <Footer />
+          </>
+        );
+
+      case 'astrologer-profile':
+        return (
+          <>
+            <Header />
+            <main className="flex-1">
+              <AstrologerProfileDetail
+                slug={selectedAstrologerSlug}
+                onBack={() => setCurrentScreen('astrologer-directory')}
+                onBookingSuccess={(cid) => {
+                  setSelectedConsultationId(cid);
+                  setCurrentScreen('consultation-room');
+                }}
+              />
+            </main>
+            <Footer />
+          </>
+        );
+
+      case 'astrologer-wizard':
+        return (
+          <>
+            <Header />
+            <main className="flex-1">
+              <AstrologerRegistrationWizard
+                onExit={() => setCurrentScreen('astrology')}
+                onPreview={(slug) => {
+                  setSelectedAstrologerSlug(slug);
+                  setCurrentScreen('astrologer-profile');
+                }}
+              />
+            </main>
+            <Footer />
+          </>
+        );
+
+      case 'consultation-room':
+        return (
+          <>
+            <Header />
+            <main className="flex-1">
+              <ConsultationRoom
+                consultationId={selectedConsultationId}
+                onBack={() => setCurrentScreen('astrology-dashboard')}
+                onOpenPanditBooking={() => setCurrentScreen('pandit-directory')}
+              />
+            </main>
+            <Footer />
+          </>
+        );
+
+      case 'astrology-admin':
+        return (
+          <>
+            <Header />
+            <main className="flex-1">
+              <AstrologyAdminDashboard
+                onBack={() => setCurrentScreen('astrology')}
+              />
+            </main>
+            <Footer />
+          </>
+        );
+
+      case 'local-updates':
+        return (
+          <>
+            <Header />
+            <main className="flex-1">
+              <LocalUpdatesPage
+                onBack={() => setCurrentScreen('dashboard')}
+                onSelectArticle={(art) => {
+                  setSelectedNewsSlug(art.slug);
+                  setCurrentScreen('local-updates-detail');
+                }}
+              />
+            </main>
+            <Footer />
+          </>
+        );
+
+      case 'local-updates-detail':
+        return (
+          <>
+            <Header />
+            <main className="flex-1">
+              <NewsDetailsPage
+                articleSlug={selectedNewsSlug}
+                onBack={() => setCurrentScreen('local-updates')}
+                onSelectArticle={(art) => {
+                  setSelectedNewsSlug(art.slug);
+                  setCurrentScreen('local-updates-detail');
+                }}
+              />
+            </main>
+            <Footer />
+          </>
+        );
+
+      // --- Spiritual Events & Meetup Routes ---
+      case 'events':
+        return (
+          <>
+            <Header />
+            <main className="flex-1">
+              <EventsDiscoveryPage
+                onBack={() => setCurrentScreen('dashboard')}
+                currentUser={user}
+                onNotify={(msg, type) => showToast(msg, type)}
+                onSelectEvent={(ev) => {
+                  setSelectedEventSlug(ev.slug);
+                  setCurrentScreen('event-detail');
+                }}
+                onNavigateCreate={() => {
+                  if (!user) {
+                    openAuth('Host Event', 'login');
+                  } else {
+                    setCurrentScreen('event-create');
+                  }
+                }}
+              />
+            </main>
+            <Footer />
+          </>
+        );
+
+      case 'event-detail':
+        return (
+          <>
+            <Header />
+            <main className="flex-1">
+              <EventDetailsPage
+                slug={selectedEventSlug}
+                currentUser={user}
+                onNotify={(msg, type) => showToast(msg, type)}
+                onBack={() => setCurrentScreen('events')}
+                onNavigateOrganizer={(eventId) => {
+                  setSelectedEventId(eventId);
+                  setCurrentScreen('organizer-events');
+                }}
+              />
+            </main>
+            <Footer />
+          </>
+        );
+
+      case 'event-create':
+        return (
+          <>
+            <Header />
+            <main className="flex-1">
+              <EventCreationWizard
+                currentUser={user}
+                onNotify={(msg, type) => showToast(msg, type)}
+                onCancel={() => setCurrentScreen('events')}
+                onSuccess={(newEvent) => {
+                  if (newEvent?.slug) {
+                    setSelectedEventSlug(newEvent.slug);
+                    setCurrentScreen('event-detail');
+                  } else {
+                    setCurrentScreen('events');
+                  }
+                }}
+              />
+            </main>
+            <Footer />
+          </>
+        );
+
+      case 'organizer-events':
+        return (
+          <>
+            <Header />
+            <main className="flex-1">
+              <OrganizerDashboard
+                initialEventId={selectedEventId}
+                currentUser={user}
+                onNotify={(msg, type) => showToast(msg, type)}
+                onBack={() => setCurrentScreen('events')}
+                onNavigateCreate={() => setCurrentScreen('event-create')}
+              />
+            </main>
+            <Footer />
+          </>
+        );
+
+      case 'admin-events':
+      case 'events-admin':
+        return (
+          <>
+            <Header />
+            <main className="flex-1">
+              <AdminEventDashboard
+                onNotify={(msg, type) => showToast(msg, type)}
+                onBack={() => setCurrentScreen('events')}
+              />
+            </main>
+            <Footer />
+          </>
+        );
+
       case 'dashboard':
       default:
         return (
@@ -273,6 +608,8 @@ function MainLayout() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F7EEDC] text-[#2A2036]">
+      <SEOHead />
+      <SplashScreen />
       <Toast />
       {renderContent()}
     </div>

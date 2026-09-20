@@ -27,10 +27,28 @@ export default function Footer() {
               List your service
             </button>
             <button 
+              onClick={() => handleServiceClick('Astrology')}
+              className="hover:text-[#F7EEDC] bg-transparent border-0 p-0 text-sm transition-colors text-[#E8862B]"
+            >
+              🔮 Astrology &amp; Kundli
+            </button>
+            <button 
+              onClick={() => handleServiceClick('Register as Astrologer')}
+              className="hover:text-[#F7EEDC] bg-transparent border-0 p-0 text-sm transition-colors"
+            >
+              Register as Astrologer
+            </button>
+            <button 
               onClick={() => handleServiceClick('Spiritual')}
               className="hover:text-[#F7EEDC] bg-transparent border-0 p-0 text-sm transition-colors text-[#E8862B]"
             >
               🕉️ Spiritual &amp; Katha
+            </button>
+            <button 
+              onClick={() => handleServiceClick('Local Updates')}
+              className="hover:text-[#F7EEDC] bg-transparent border-0 p-0 text-sm transition-colors text-[#E8862B]"
+            >
+              📰 Local Updates &amp; News
             </button>
             <button 
               onClick={() => handleServiceClick('Find Pandit')}
